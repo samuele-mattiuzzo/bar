@@ -1,8 +1,11 @@
 try:
-    from PIL import Image
+    from PIL import Image, ImageDraw, ImageFont
 except ImportError:
     import Image
+    import ImageDraw
+    import ImageFont
 
+import os
 import random
 import urllib
 import cStringIO
@@ -64,5 +67,19 @@ def to_ascii(url):
         out = out+"\n"
     return out
 
-if __name__=='__main__':
-    print to_ascii('http://upload.wikimedia.org/wikipedia/commons/8/87/Avatar_poe84it.png')
+
+def to_image(url):
+
+    img = Image.new('L', (500, 500), 255)
+    draw = ImageDraw.Draw(img)
+    img_content = to_ascii(url)
+    font = ImageFont.truetype(os.getcwd() + '/font/anon.ttf', 10)
+
+    draw.text((0, 0), img_content, font=font, fill=100)
+    del draw
+
+    img.save('output.png')
+
+
+if __name__ == '__main__':
+    print to_image('http://upload.wikimedia.org/wikipedia/commons/8/87/Avatar_poe84it.png')
